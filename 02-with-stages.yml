@@ -14,43 +14,61 @@ stages:
   jobs:
   - job: FirstJob
     steps:
-    - bash: echo Init FirstJob
-  - job: SecondJob
-    steps:
-    - bash: echo Init SecondJob
-- stage: Validate
-  dependsOn: Init
-  jobs:
-  - job: ValidateirstJob
-    steps:
-    - bash: echo Validate FirstJob
-  - job: ValidateSecondJob
-    steps:
-    - bash: echo Validate SecondJob
-- stage: Build
-  dependsOn: Init
-  jobs:
-  - job: BuildFirstJob
-    steps:
-    - bash: echo Build FirstJob
-  - job: BuildSecondJob
-    steps:
-    - bash: echo Build SecondJob
-- stage: FotifyScan
-  dependsOn: Build
-  jobs:
-  - job: FotifyScanFirstJob
-    steps:
-    - bash: echo FotifyScan FirstJob
-  - job: FotifyScanSecondJob
-    steps:
-    - bash: echo FotifyScan SecondJob
-- stage: ReleaseToDev
-  dependsOn: Build
-  jobs:
-  - job: ReleaseToDevFirstJob
-    steps:
-    - bash: echo ReleaseToDev FirstJob
-  - job: ReleaseToDevSecondJob
-    steps:
-    - bash: echo ReleaseToDev SecondJob
+    - bash: echo Init 
+    - bash: echo  $(Init.BuildNumber)
+    - bash: echo  $(Init.BuildId)
+    - bash: echo  $(Init.SourceBranchName)
+    - bash: echo  $(Init.SourceDirectory)
+    - bash: echo  $(System.DefaultWorkingDirectory)
+    - bash: ls -R $(System.DefaultWorkingDirectory)
+    - bash: echo  $(Build.ArtifactStagingDirectory)
+    - bash: java -version
+    - bash: node --version
+    - bash: python --version
+    - bash: mvn -version
+    - bash: ls -R  $(Build.ArtifactStagingDirectory)
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          **/*.yaml
+          **/*.tf
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - bash: ls -R  $(Build.ArtifactStagingDirectory)
+
+# - stage: Validate
+#   dependsOn: Init
+#   jobs:
+#   - job: ValidateirstJob
+#     steps:
+#     - bash: echo Validate FirstJob
+#   - job: ValidateSecondJob
+#     steps:
+#     - bash: echo Validate SecondJob
+# - stage: Build
+#   dependsOn: Init
+#   jobs:
+#   - job: BuildFirstJob
+#     steps:
+#     - bash: echo Build FirstJob
+#   - job: BuildSecondJob
+#     steps:
+#     - bash: echo Build SecondJob
+# - stage: FotifyScan
+#   dependsOn: Build
+#   jobs:
+#   - job: FotifyScanFirstJob
+#     steps:
+#     - bash: echo FotifyScan FirstJob
+#   - job: FotifyScanSecondJob
+#     steps:
+#     - bash: echo FotifyScan SecondJob
+# - stage: ReleaseToDev
+#   dependsOn: Build
+#   jobs:
+#   - job: ReleaseToDevFirstJob
+#     steps:
+#     - bash: echo ReleaseToDev FirstJob
+#   - job: ReleaseToDevSecondJob
+#     steps:
+#     - bash: echo ReleaseToDev SecondJob
