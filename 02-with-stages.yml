@@ -15,10 +15,10 @@ stages:
   - job: FirstJob
     steps:
     - bash: echo Init 
-    - bash: echo  $(Init.BuildNumber)
-    - bash: echo  $(Init.BuildId)
-    - bash: echo  $(Init.SourceBranchName)
-    - bash: echo  $(Init.SourceDirectory)
+    - bash: echo  $(Build.BuildNumber)
+    - bash: echo  $(Build.BuildId)
+    - bash: echo  $(Build.SourceBranchName)
+    - bash: echo  $(Build.SourceDirectory)
     - bash: echo  $(System.DefaultWorkingDirectory)
     - bash: ls -R $(System.DefaultWorkingDirectory)
     - bash: echo  $(Build.ArtifactStagingDirectory)
