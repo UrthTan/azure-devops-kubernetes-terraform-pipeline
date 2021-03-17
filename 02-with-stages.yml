@@ -10,35 +10,47 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: Build
+- stage: Init
   jobs:
   - job: FirstJob
     steps:
-    - bash: echo Build FirstJob
+    - bash: echo Init FirstJob
   - job: SecondJob
     steps:
+    - bash: echo Init SecondJob
+- stage: Validate
+  dependsOn: Init
+  jobs:
+  - job: ValidateirstJob
+    steps:
+    - bash: echo Validate FirstJob
+  - job: ValidateSecondJob
+    steps:
+    - bash: echo Validate SecondJob
+- stage: Build
+  dependsOn: Init
+  jobs:
+  - job: BuildFirstJob
+    steps:
+    - bash: echo Build FirstJob
+  - job: BuildSecondJob
+    steps:
     - bash: echo Build SecondJob
-- stage: DevDeploy
+- stage: FotifyScan
+  dependsOn: Build
   jobs:
-  - job: DevFirstJob
+  - job: FotifyScanFirstJob
     steps:
-    - bash: echo Dev FirstJob
-  - job: DevSecondJob
+    - bash: echo FotifyScan FirstJob
+  - job: FotifyScanSecondJob
     steps:
-    - bash: echo Dev SecondJob
-- stage: QADeploy
+    - bash: echo FotifyScan SecondJob
+- stage: ReleaseToDev
+  dependsOn: Build
   jobs:
-  - job: QAFirstJob
+  - job: ReleaseToDevFirstJob
     steps:
-    - bash: echo QA FirstJob
-  - job: QASecondJob
+    - bash: echo ReleaseToDev FirstJob
+  - job: ReleaseToDevSecondJob
     steps:
-    - bash: echo QA SecondJob
-- stage: ProdDeploy
-  jobs:
-  - job: ProdFirstJob
-    steps:
-    - bash: echo Prod FirstJob
-  - job: ProdSecondJob
-    steps:
-    - bash: echo Prod SecondJob
+    - bash: echo ReleaseToDev SecondJob
